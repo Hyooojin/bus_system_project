@@ -1,42 +1,105 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="<c:url value="/resources/css/bootstrap.min.css" />">
+<%-- <link rel="stylesheet" href="<c:url value="/resources/css/bubbles.css" />"> --%>
+<script src="<c:url value="/resources/js/jquery-3.2.1.js" />"></script>
+<script src="<c:url value="/resources/js/bootstrap.min.js" />"></script>
 <title>Insert title here</title>
-
-<!-- 자바스크립트에서 서버로 데이터를 넘겨주고, 서버에서 그 결과를 DB에 저장한 후, 다시 게시글 목록으로 이동시킨다. -->
+<link rel="shortcut icon" href="/favicon.ico" />
 <script type="text/javascript">
-	$(document).ready(function(){
-		$("#list").on("click", function(e){
-			e.preventDefault();
-			fn_openBoardList();
-		});
+$(document).ready(function(){
+	$('#inputbusname').keypress(function(e){
+		if (e.which === 13){
+			ajax_process();
+		}
 	});
 	
-	function fn_openBoardList(){
-		var comSubmit = new Comsubmit();
-		comSubmit.setUrl("<c:url value='/sample/openBoardList.do'/>");
-	}
-</script>
+	$('#btn_submit').click(function(){
+		ajax_process();
+	});
+});
 
+
+
+function ajax_process(_isay){
+	var inputbusname = $.trim($('#inputbusname').val());
+	var outputdata = "";
+/* 	$.ajax({
+		type : 'POST',
+		url  : 'getkeyword',
+		data : 'busname=' + inputbusname,
+		async: false,
+		success : function(data) {
+			
+			
+			$('#display').append(data);	
+			//$('html, body').animate({scrollTop: $(document).height()}, 500);
+		}
+	}); */
+	
+	$.getJSON( "getkeyword?busname="+inputbusname, function( data ) {
+		  //var items = [];
+		  var tab = "<table>";
+		  
+		  $.each( data, function( key, val ) {
+		    //items.push( val.stationName);
+		    tab+='<tr><td>'+val.stationName+'</td><td>'+val.stationSeq+'</td></tr>';
+		  });
+		 tab += '</table>';
+		 $('#display').html(tab);	
+		});
+	
+		var image = '<img src="<c:url value="/resources/img/'+inputbusname+'.png"/>" width="500px"/>';
+		
+		$('#timetable').html(image);
+	
+	
+	
+/* 	$.get(image_url)
+		.done(function(){
+			// Do something now you know the image exiests.
+			
+			.fail(function() {
+			// Image doesn't exist - do something else.	
+			})
+		})
+	
+	
+	function imageExists(image_url){
+		var http = new XMLHttpRequest();
+		
+		http.open('HEAD', image_url, false);
+		http.send();
+		
+		return http.status != 404;
+	} */
+		
+		
+}
+</script>
 </head>
 
 
 
 <body>
 
-<form action="getkeyword">
 	<h1>광역급행버스 시간표</h1>
 	
 		<a>지금 시각은 </a>${serverTime}<br/>
 	
 	Enter your bus: 
-	<input name="busname" type="text" value="${bus_keyword}"><input type="submit" class="btn btn-success" value="검색" required><br/>
+	<input name="busname" id="inputbusname" type="text" autofocus="autofocus" ><input type="Button" class="btn btn-success" value="검색" required id="btn_submit" > <br/>
 	<P>The time on the server is ${serverTime}. </P>
-</form>
-
+	
+<div class="row">	
+<div id="display" class="col-3"></div>
+<div id="timetable"class="col-5"></div>
+</div>
 </body>
 </html>
