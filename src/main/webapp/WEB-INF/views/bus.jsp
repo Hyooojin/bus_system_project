@@ -43,7 +43,7 @@ function ajax_process(_isay){
 		}
 	}); */
 	
-	$.getJSON( "getkeyword?busname="+inputbusname, function( data ) {
+	/* $.getJSON( "getkeyword?busname="+inputbusname, function( data ) {
 		  //var items = [];
 		  var tab = "<table>";
 		  
@@ -53,9 +53,9 @@ function ajax_process(_isay){
 		  });
 		 tab += '</table>';
 		 $('#display').html(tab);	
-		});
+		}); */
 	
-		var image = '<img src="<c:url value="/resources/img/'+inputbusname+'.png"/>" width="500px"/>';
+		var image = '<img src="<c:url value="/resources/img/'+inputbusname+'.png"/>" usemap="#mapping" border = "2" width="500"/>';
 		
 		$('#timetable').html(image);
 	
@@ -97,9 +97,10 @@ function ajax_process(_isay){
 	<input name="busname" id="inputbusname" type="text" autofocus="autofocus" ><input type="Button" class="btn btn-success" value="검색" required id="btn_submit" > <br/>
 	<P>The time on the server is ${serverTime}. </P>
 	
-<div class="row">	
-<div id="display" class="col-3"></div>
-<div id="timetable"class="col-5"></div>
+
+<div class="cantainer">
+<span id="timetable"></span>
 </div>
+<!-- <span id="display"></span> -->
 </body>
 </html>
