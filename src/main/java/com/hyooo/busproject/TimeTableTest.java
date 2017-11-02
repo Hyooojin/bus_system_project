@@ -68,6 +68,13 @@ public class TimeTableTest {
 		return contents;
 	}
 	
+	private static String getTagValue(String tag, Element eElement) {
+	    NodeList nlList = eElement.getElementsByTagName(tag).item(0).getChildNodes();
+	    Node nValue = (Node) nlList.item(0);
+	    if(nValue == null) 
+	        return null;
+	    return nValue.getNodeValue();
+	}
 	
 	public static void getBusStations(String routeId) throws SAXException, IOException, ParserConfigurationException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -77,8 +84,9 @@ public class TimeTableTest {
 				"?serviceKey=%2FAZmph59t7wQ0JpCGVHGnBdeFKDfQ74%2BQQ9RBmL4Vcw0AlMjHKt%2Fsssr6Qhx%2F0O8l6OmR2JddolqyifPaHAfmA%3D%3D");
 		urlBuilder.append("&routeId=" +routeId);
 		Document doc = builder.parse(urlBuilder.toString());
+		
 
-		String[] elem = {
+/*		String[] elem = {
 				 "centerYn", 
 				 "districtCd",
 					"mobileNo",
@@ -100,12 +108,39 @@ public class TimeTableTest {
 			StationVO stationVO = new StationVO();
 			for(int e=0; e < elem.length; e++) {
 				NodeList elemlist = doc.getElementsByTagName(elem[e]);
+				System.out.println("e"+elem[e]);
+				System.out.println(elemlist.item(i));
 				Element element=(Element) elemlist.item(i);
 				contents = element.getTextContent();
 	
 				i++; 
 			}
-		}
+		}*/
+		
+
+
+
+		int i = 0;
+		String contents = null;
+		NodeList list = doc.getElementsByTagName("busRouteStationList");
+		for(i = 0; i < list.getLength(); i++){		
+			Node nNode = list.item(i);
+			if(nNode.getNodeType() == Node.ELEMENT_NODE){
+								
+				Element eElement = (Element) nNode;
+				System.out.println("######################");
+				//System.out.println(eElement.getTextContent());
+				System.out.println("금융사  : " + getTagValue("centerYn", eElement));
+				System.out.println("상품 코드  : " + getTagValue("stationName", eElement));
+				System.out.println("상품명 : " + getTagValue("fin_prdt_nm", eElement));
+				System.out.println("연평균 수익률  : " + getTagValue("avg_prft_rate", eElement));
+				System.out.println("공시 이율  : " + getTagValue("dcls_rate", eElement));
+			}	// for end
+		}	// if end
+
+		
+		
+		
 		
 	}
 	
