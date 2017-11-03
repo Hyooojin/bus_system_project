@@ -30,7 +30,7 @@ $(document).ready(function(){
 function ajax_process(_isay){
 	var inputbusname = $.trim($('#inputbusname').val());
 	var outputdata = "";
-/* 	$.ajax({
+ 	$.ajax({
 		type : 'POST',
 		url  : 'getkeyword',
 		data : 'busname=' + inputbusname,
@@ -41,22 +41,27 @@ function ajax_process(_isay){
 			$('#display').append(data);	
 			//$('html, body').animate({scrollTop: $(document).height()}, 500);
 		}
-	}); */
+	}); 
 	
-	/* $.getJSON( "getkeyword?busname="+inputbusname, function( data ) {
+	 $.getJSON( "getkeyword?busname="+inputbusname, function( data ) {
 		  //var items = [];
-		  var tab = "<table>";
+		  var tab = '<table class="table">';
+		  tab = '<thead>'
+		    	+ '<tr>'
+		      	+ '<th>   </th>'
+		      	+ '<th>정류장 이름</th>'
+		   		+ '</tr>'
+		  		+ '</thead><tbody>';
 		  
 		  $.each( data, function( key, val ) {
 		    //items.push( val.stationName);
-		    tab+='<tr><td>'+val.stationName+'</td><td>'+val.stationSeq+'</td></tr>';
+		    tab+='<tr><th scope="row">'+val.stationSeq+'</th><td>'+val.stationName+'</td></tr>';
 		  });
-		 tab += '</table>';
+		 tab += '</tbody></table>';
 		 $('#display').html(tab);	
-		}); */
+		}); 
 	
 		var image = '<img src="<c:url value="/resources/img/'+inputbusname+'.png"/>" usemap="#mapping" border = "2" width="500"/>';
-		
 		$('#timetable').html(image);
 	
 	
@@ -101,6 +106,6 @@ function ajax_process(_isay){
 <div class="cantainer">
 <span id="timetable"></span>
 </div>
-<!-- <span id="display"></span> -->
+<div id="display"></div>
 </body>
 </html>
